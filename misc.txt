@@ -42,6 +42,8 @@ mounted
 plugged
 running
 waiting
+
+$alias A1=' awk '\''{print $1}'\'''
       
 $vimdiff <(systemctl --all --no-legend|A1|sort) <(systemctl list-unit-files --no-legend|A1|sort)
 
