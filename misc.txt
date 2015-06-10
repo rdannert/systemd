@@ -1,12 +1,20 @@
 $uname -n -r
 opensuse132 3.16.7-7-desktop
 
+explore via rpm:
+
+       --scripts
+              List the package specific scriptlet(s) that are used as part of the installation and uninstallation processes.
+
 
 $rpm -q --scripts ntp|grep preset
   /usr/bin/systemctl preset ntpd.service >/dev/null 2>&1 || :					
       /usr/bin/systemctl preset "$service" >/dev/null 2>&1 || :				
   /usr/bin/systemctl preset ntp-wait.service >/dev/null 2>&1 || :					
       /usr/bin/systemctl preset "$service" >/dev/null 2>&1 || :		
+
+$rpm -q --scripts postfix|egrep '(preset|systemd|systemctl)'
+$rpm -q --scripts postfix|egrep -e '(sysv-convert|sysv_service)'
 
 $systemctl list-dependencies|grep target
 default.target
@@ -48,4 +56,30 @@ $alias A1=' awk '\''{print $1}'\'''
 $vimdiff <(systemctl --all --no-legend|A1|sort) <(systemctl list-unit-files --no-legend|A1|sort)
 
 $vimdiff <(systemctl --all --no-legend|A1|sort) <(systemctl -l --no-legend|A1|sort)
+
+systemd-analyze blame
+systemd-analyze plot >/tmp/plot1.htm
+
+# diff journald.conf journald.conf.orig
+11c11
+< Storage=persistent
+---
+> #Storage=auto
+
+https://wiki.archlinux.org/index.php/Systemd#Troubleshooting
+$ journalctl _PID=15630
+
+Diagnosing boot problems
+Boot with these parameters on the kernel command line: systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M 
+
+http://freedesktop.org/wiki/Software/systemd/Debugging/
+
+Booting into Rescue or Emergency Targets
+
+To boot directly into rescue target add systemd.unit=rescue.target or just 1 to the kernel command line. This target is useful if the problem occurs somewhere after the basic system is brought up, during the starting of "normal" services. If this is the case, you should be able to disable the bad service from here. If the rescue target will not boot either, the more minimal emergency target might.
+
+To boot directly into emergency shell add systemd.unit=emergency.target or emergency to the kernel command line. Note that in the emergency shell you will have to remount the root filesystem read-write by yourself before editing any files:
+
+mount -o remount,rw /
+common issues that can be resolved in the emergency shell are bad lines in /etc/fstab. After fixing /etc/fstab, run systemctl daemon-reload 
 
