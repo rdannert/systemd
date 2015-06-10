@@ -1,0 +1,49 @@
+$uname -n -r
+opensuse132 3.16.7-7-desktop
+
+
+$rpm -q --scripts ntp|grep preset
+  /usr/bin/systemctl preset ntpd.service >/dev/null 2>&1 || :					
+      /usr/bin/systemctl preset "$service" >/dev/null 2>&1 || :				
+  /usr/bin/systemctl preset ntp-wait.service >/dev/null 2>&1 || :					
+      /usr/bin/systemctl preset "$service" >/dev/null 2>&1 || :		
+
+$systemctl list-dependencies|grep target
+default.target
+● ├─basic.target
+● │ ├─paths.target
+● │ ├─slices.target
+● │ ├─sockets.target
+● │ ├─sysinit.target
+● │ │ ├─cryptsetup.target
+● │ │ ├─local-fs.target
+● │ │ └─swap.target
+● │ └─timers.target
+● ├─getty.target
+● └─remote-fs.target
+●   └─remote-fs-pre.target
+
+#poor man's systemd index:
+$apropos systemd|A1|while read x; do man $x> /tmp/systemd/$x.txt; done
+
+$grep -ir <search_string> /tmp/systemd/
+
+$systemd-analyze plot >/tmp/plot.htm
+ 
+$systemctl|awk '{print $4}'|head -1
+SUB
+
+$systemctl --no-legend|awk '{print $4}'|sort -u
+active
+exited
+failed
+listening
+mounted
+plugged
+running
+waiting
+      
+$vimdiff <(systemctl --all --no-legend|A1|sort) <(systemctl list-unit-files --no-legend|A1|sort)
+
+$vimdiff <(systemctl --all --no-legend|A1|sort) <(systemctl -l --no-legend|A1|sort)
+
