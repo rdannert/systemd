@@ -99,3 +99,45 @@ $rpm -qa|xargs rpm -q --scripts|grep "systemd-"
 
 $systemd-delta>/tmp/tmpfiles.txt
 see tmpfiles_in_SLE12.txt
+
+$systemd-analyze dot --to-pattern='*.target' --from-pattern='*.target' | dot -Tsvg >/tmp/targets.svg
+
+# uname -n -r
+sles11sp3migrate 3.12.28-4-default
+
+# cat /usr/lib/systemd/system-preset/90-default-SLE.preset
+enable acpid.service
+enable cron.service
+enable avahi-daemon.service
+enable YaST2-Second-Stage.service
+enable YaST2-Firstboot.service
+enable postfix.service
+enable nscd.service
+enable purge-kernels.service
+enable ModemManager.service
+enable iscsid.socket
+enable iscsi.service
+enable libvirtd.service
+enable readonly-root.service
+enable haveged.service
+enable irqbalance.service
+enable vmtoolsd.service
+enable iprdump.service
+enable iprinit.service
+enable iprupdate.service
+enable lvm2-lvmetad.socket
+enable rtas_errd.service
+enable wpa_supplicant.service
+enable cio_ignore.service
+enable btrfsmaintenance-refresh.service
+
+Troubleshooting systemd-nspawn:
+root login fails
+$ rpm -qV pam|grep missing
+missing   c /etc/securetty
+
+http://unix.stackexchange.com/questions/41840/effect-of-entries-in-etc-securetty/41939#41939
+
+
+
+
