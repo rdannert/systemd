@@ -83,3 +83,19 @@ To boot directly into emergency shell add systemd.unit=emergency.target or emerg
 mount -o remount,rw /
 common issues that can be resolved in the emergency shell are bad lines in /etc/fstab. After fixing /etc/fstab, run systemctl daemon-reload 
 
+# systemctl list-timers
+NEXT                          LEFT     UNIT                         ACTIVATES
+Thu 2015-06-11 00:00:00 CEST  9h left  logrotate.timer              logrotate.service
+Thu 2015-06-11 13:53:50 CEST  23h left systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+
+
+https://en.opensuse.org/openSUSE:Systemd_packaging_guidelines
+Service files
+
+Service files should always be installed in %_unitdir (ie /usr/lib/systemd/system) and never in /etc/systemd/system (so they can be overriden by users without conflicting with packaging). 
+
+#explore execution of systemd commands in post-scripts in rpm
+$rpm -qa|xargs rpm -q --scripts|grep "systemd-"
+
+$systemd-delta>/tmp/tmpfiles.txt
+see tmpfiles_in_SLE12.txt

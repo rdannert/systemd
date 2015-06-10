@@ -1,0 +1,37 @@
+https://www.suse.com/documentation/sles-12/book_sle_admin/data/sec_boot_systemd_advanced.html
+$systemd-delta>/tmp/tmpfiles.txt
+
+[OVERRIDDEN] /etc/tmpfiles.d/tmp.conf → /usr/lib/tmpfiles.d/tmp.conf
+
+--- /usr/lib/tmpfiles.d/tmp.conf	2014-10-08 18:49:14.000000000 +0200
++++ /etc/tmpfiles.d/tmp.conf	2015-06-10 14:03:58.698905766 +0200
+@@ -7,13 +7,194 @@
+ 
+ # See tmpfiles.d(5) for details
+ 
+-# Clear tmp directories separately, to make them easier to override
+-# SUSE policy: we don't clean those directories
+-d /tmp 1777 root root -
+-d /var/tmp 1777 root root -
+-
+ # Exclude namespace mountpoints created with PrivateTmp=yes
+ x /tmp/systemd-private-%b-*
+ X /tmp/systemd-private-%b-*/tmp
+ x /var/tmp/systemd-private-%b-*
+ X /var/tmp/systemd-private-%b-*/tmp
++
++
++#########Moved sysconfig variables, do not delete leading hashes!#########
++## Type:        string
++## Default:     root
++#
++# In OWNER_TO_KEEP_IN_TMP, you can specify, whose files shall not be deleted.
++#
++#OWNER_TO_KEEP_IN_TMP="root"
++
++## Type:         string
++## Default:      
++#
++# To which of the TMP directories should OWNER_TO_KEEP_IN_TMP apply.
++# If empty it defaults to all directory entries in /etc/tmpfiles.d/tmp.conf.
++#TMPDIR_TO_SEARCH_OWNER="/tmp"
